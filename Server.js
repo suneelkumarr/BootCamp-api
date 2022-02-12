@@ -10,7 +10,7 @@ const hpp = require("hpp");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
-
+const errorHandler = require('./middleware/error');
 const connectDB = require("./config/db");
 
 dotenv.config({ path: "./config/config.env" });
@@ -21,6 +21,9 @@ connectDB()
 //Routes initialization
 const users = require('./routes/users')
 const auth = require("./routes/auth");
+const bootcamps = require("./routes/bootcamps");
+const courses = require("./routes/courses");
+const reviews = require("./routes/reviews");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -45,12 +48,12 @@ app.use(hpp());
 app.use(cors());
 
 // app.use(express.static(path.join(__dirname, "public")));
-// app.use(process.env.URL_BOOTCAMPS, bootcamps);
-// app.use(process.env.URL_COURSES, courses);
+app.use(process.env.URL_BOOTCAMPS, bootcamps);
+app.use(process.env.URL_COURSES, courses);
 app.use(process.env.URL_AUTH, auth);
 app.use(process.env.URL_USERS, users);
-// app.use(process.env.URL_REVIEWS, reviews);
-// app.use(errorHandler);
+app.use(process.env.URL_REVIEWS, reviews);
+app.use(errorHandler);
 
 
 // Start Server
