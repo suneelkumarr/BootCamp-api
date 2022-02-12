@@ -15,9 +15,12 @@ const connectDB = require("./config/db");
 
 dotenv.config({ path: "./config/config.env" });
 
-
 const app = express();
 connectDB()
+
+//Routes initialization
+const users = require('./routes/users')
+const auth = require("./routes/auth");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -44,8 +47,8 @@ app.use(cors());
 // app.use(express.static(path.join(__dirname, "public")));
 // app.use(process.env.URL_BOOTCAMPS, bootcamps);
 // app.use(process.env.URL_COURSES, courses);
-// app.use(process.env.URL_AUTH, auth);
-// app.use(process.env.URL_USERS, users);
+app.use(process.env.URL_AUTH, auth);
+app.use(process.env.URL_USERS, users);
 // app.use(process.env.URL_REVIEWS, reviews);
 // app.use(errorHandler);
 
