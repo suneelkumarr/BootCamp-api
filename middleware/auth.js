@@ -15,7 +15,7 @@ exports.protect = asyncHandler (async (req, res, next) => {
     }
 
     if(!token){
-        return next(new ErrorResponse("Not Authorized!", STATUS_CODES.UNAUTHORIZED))
+        return next(new errorResponse("Not Authorized!", STATUS_CODES.UNAUTHORIZED))
     }
 
     try{
@@ -32,7 +32,8 @@ exports.protect = asyncHandler (async (req, res, next) => {
 // Grant access roles
 exports.authorize = (...roles) => {
     return (req, res, next) => {
-        if(!roles.includes(req.user.role)){
+        if(!roles.includes(req.body.role)){
+            console.log("You are not authorized", req.body)
             return next(
                 new errorResponse(
                     `User role ${req.user.role} has no access to this route`,
