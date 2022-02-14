@@ -4,6 +4,7 @@ const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const geoCoder = require("../utils/geocoder");
 const STATUS_CODES = require("http-response-status-code");
+const User = require('../models/User')
 
 // @desc    Get all Bootcamps
 // @route   GET /api/v1/bootcamps
@@ -21,7 +22,7 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
   if (!bootcamp) {
     return next(
       new ErrorResponse(
-        `Bootcamp id:${req.params.id} not found`,
+        `Bootcamp id:${req.body.id} not found`,
         STATUS_CODES.BAD_REQUEST
       )
     );
@@ -39,9 +40,17 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
   // Add user
   req.body.user = req.body.user;
+  let user = await User.findById(req.body.user);
+  if (!user) {
+    return next(
+      new ErrorResponse(
+        `User id:${req.body.user} not found`,
+        STATUS_CODES.BAD_REQUEST
+      )
+    );
+  }
   // Check for Published bootcamp
   const publishedBootcamp = await Bootcamp.findOne({ user: req.body.user });
-  console.log('this is too serious',req.user.id)
 
   if (publishedBootcamp && req.user.role !== "admin") {
     return next(
@@ -74,7 +83,18 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
     );
   }
 
-  if (bootcamp.user.toString() !== req.user.id && req.user.role !== "admin") {
+  let user = await User.findById(req.body.user);
+  if (!user) {
+    return next(
+      new ErrorResponse(
+        `User id:${req.body.user} not found`,
+        STATUS_CODES.BAD_REQUEST
+      )
+    );
+  }
+
+
+  if (bootcamp.user.toString() !== req.body.user && req.body.role !== "admin") {
     return next(
       new ErrorResponse(
         `Bootcamp can only be updated by owner`,
@@ -109,7 +129,7 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
     );
   }
 
-  if (bootcamp.user.toString() !== req.user.id && req.user.role !== "admin") {
+  if (bootcamp.user.toString() !== req.body.user && req.body.role !== "admin") {
     return next(
       new ErrorResponse(
         `Bootcamp can only be removed by owner`,
@@ -163,7 +183,18 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
     );
   }
 
-  if (bootcamp.user.toString() !== req.user.id && req.user.role !== "admin") {
+  let user = await User.findById(req.body.user);
+  if (!user) {
+    return next(
+      new ErrorResponse(
+        `User id:${req.body.user} not found`,
+        STATUS_CODES.BAD_REQUEST
+      )
+    );
+  }
+
+
+  if (bootcamp.user.toString() !== req.body.user && req.body.role !== "admin") {
     return next(
       new ErrorResponse(
         `Bootcamp picture can only be updated by owner`,
