@@ -183,15 +183,15 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
     );
   }
 
-  let user = await User.findById(req.body.user);
-  if (!user) {
-    return next(
-      new ErrorResponse(
-        `User id:${req.body.user} not found`,
-        STATUS_CODES.BAD_REQUEST
-      )
-    );
-  }
+  // let user = await User.findById(req.body.user);
+  // if (!user) {
+  //   return next(
+  //     new ErrorResponse(
+  //       `User id:${req.body.user} not found`,
+  //       STATUS_CODES.BAD_REQUEST
+  //     )
+  //   );
+  // }
 
 
   if (bootcamp.user.toString() !== req.body.user && req.body.role !== "admin") {
