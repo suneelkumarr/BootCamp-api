@@ -48,8 +48,8 @@ exports.getReview = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/bootcamps/:bootcampId/reviews
 // @access  Private
 exports.createReview = asyncHandler(async (req, res, next) => {
-  req.body.bootcamp = req.params.bootcampId;
-  req.body.user = req.user.id;
+   req.params.bootcampId =req.body.bootcamp;
+   const userId = req.body.user;
 
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
 

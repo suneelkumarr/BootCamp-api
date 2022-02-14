@@ -48,8 +48,8 @@ exports.getCourseById = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/bootcamps/:bootcampId/courses
 // @access  Private
 exports.createCourse = asyncHandler(async (req, res, next) => {
-  req.body.bootcamp = req.params.bootcampId;
-  req.body.user = req.user.id;
+  req.params.bootcampId = req.body.bootcamp;
+ const userId = req.body.user;
 
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
 
@@ -62,7 +62,8 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
     );
   }
 
-  if (bootcamp.user.toString() !== req.user.id && req.user.role !== "admin") {
+
+  if (bootcamp.user.toString() !== userId && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `Course can only be created by owner`,

@@ -38,9 +38,10 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
   // Add user
-  req.body.user = req.user.id;
+  req.body.user = req.body.user;
   // Check for Published bootcamp
-  const publishedBootcamp = await Bootcamp.findOne({ user: req.user.id });
+  const publishedBootcamp = await Bootcamp.findOne({ user: req.body.user });
+  console.log('this is too serious',req.user.id)
 
   if (publishedBootcamp && req.user.role !== "admin") {
     return next(
